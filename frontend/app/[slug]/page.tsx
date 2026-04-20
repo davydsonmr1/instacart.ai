@@ -64,7 +64,7 @@ export default async function Storefront({ params }: PageProps) {
     <div className={styles.page}>
       <div className={styles.ambient} aria-hidden="true" />
       <StoreHeader profile={store.profile} />
-      <main className={styles.main}>
+      <main id="main-content" className={styles.main}>
         {store.products.length === 0 ? (
           <p className={styles.empty}>Esta loja ainda não publicou produtos.</p>
         ) : (

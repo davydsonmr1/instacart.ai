@@ -19,7 +19,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <LogoutButton />
         </div>
       </aside>
-      <main className={styles.content}>{children}</main>
+      <main id="main-content" className={styles.content}>{children}</main>
     </div>
   );
 }

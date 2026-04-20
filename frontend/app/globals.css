@@ -12,7 +12,7 @@
   --bg-elevated: #111111;
   --text-primary: #f5f5f5;
   --text-secondary: #9e9e9e;
-  
+
   --accent: #00E676; /* Bio-Neon Green */
   --accent-glow: rgba(0, 230, 118, 0.4);
   --accent-muted: rgba(0, 230, 118, 0.1);
@@ -25,9 +25,10 @@
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* Motion */
+  /* Motion — sobrescritas para 0ms em prefers-reduced-motion */
   --t-card: 0.3s;
   --t-fast: 0.18s;
+  --t-slow: 0.5s;
 
   /* Shadows & Blurs */
   --blur-md: blur(12px);
@@ -65,4 +66,82 @@ button {
 ::selection {
   background-color: var(--accent);
   color: var(--bg-base);
+}
+
+/* =========================================================================
+   Acessibilidade — WCAG 2.2 / 3.0
+   ========================================================================= */
+
+/* Foco global visível em Bio-Neon. Aplica-se sempre que o navegador
+   considera relevante (tab, click em elementos form, etc). */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Nunca remover outline de elementos interativos sem substituir */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Skip link — fica invisível até receber foco via Tab */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 1000;
+  padding: 0.75rem 1rem;
+  background: var(--accent);
+  color: var(--bg-base);
+  font-weight: 700;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus-visible {
+  top: 1rem;
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+/* Utilitário para texto apenas para leitores de tela */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-card: 0s;
+    --t-fast: 0s;
+    --t-slow: 0s;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Windows high-contrast (forced-colors) */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid CanvasText;
+  }
 }
