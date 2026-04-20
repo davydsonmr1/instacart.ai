@@ -90,6 +90,14 @@ export class ProductsService {
     dto: UpdateProductDto,
     file?: Express.Multer.File,
   ): Promise<Product> {
+    // DECISÃO ARQUITETÔNICA DOC:
+    // O backend atual utiliza `this.supabase.admin` (Service Role Key), ignorando o RLS.
+    // Apesar disso, a segurança do tenant (BOLA) está preservada, pois este serviço realiza a
+    // validação proativa (via `ensureOwnership` e cláusulas `.eq('user_id', userId)`).
+    // As políticas RLS do supabase são úteis para segurança no cliente, mas como esse fluxo
+    // passa sempre pela API, a checagem BOLA em nível de código é segura e aceitável 
+    // caso as políticas completas de RLS do banco (UPDATE/DELETE) se tornem redundantes.
+    
     await this.ensureOwnership(userId, productId);
 
     const patch: Partial<Product> = { ...dto };
@@ -108,7 +116,21 @@ export class ProductsService {
   }
 
   async remove(userId: string, productId: string): Promise<{ deleted: true }> {
-    await this.ensureOwnership(userId, productId);
+    const product = await this.ensureOwnership(userId, productId);
+
+    // Correção: Extrair path e remover do DB Storage antes de deletar a row no DB (evita Memory Leak)
+    if (product.image_url) {
+      try {
+        const urlParts = product.image_url.split(`${this.bucket}/`);
+        if (urlParts.length > 1) {
+          const path = urlParts[1];
+          await this.supabase.admin.storage.from(this.bucket).remove([path]);
+          this.logger.log(`Deleted image from storage: ${path}`);
+        }
+      } catch (err: any) {
+        this.logger.error(`Failed to delete image from storage: ${err.message}`);
+      }
+    }
 
     const { error } = await this.supabase.admin
       .from('products')
@@ -141,7 +163,14 @@ export class ProductsService {
       throw new BadRequestException('Imagem deve ter no máximo 5MB');
     }
 
-    const ext = extname(file.originalname || '').toLowerCase() || '.jpg';
+    // Correção da extensão via mapeamento de MIME type ao invés de usar originalname que pode ser falso/ausente
+    const mimeMap: Record<string, string> = {
+      'image/jpeg': '.jpg',
+      'image/png': '.png',
+      'image/webp': '.webp',
+      'image/avif': '.avif',
+    };
+    const ext = mimeMap[file.mimetype] || extname(file.originalname || '').toLowerCase() || '.jpg';
     const path = `${userId}/${randomUUID()}${ext}`;
 
     const { error: uploadError } = await this.supabase.admin.storage

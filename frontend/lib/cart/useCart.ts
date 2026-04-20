@@ -81,7 +81,7 @@ export const useCart = create<CartState>()(
       increaseQuantity: (id) =>
         set((s) => ({
           items: s.items.map((it) =>
-            it.id === id ? { ...it, quantity: it.quantity + 1 } : it,
+            it.id === id && it.quantity < 99 ? { ...it, quantity: it.quantity + 1 } : it,
           ),
         })),
 

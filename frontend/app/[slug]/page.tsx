@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { cache } from 'react';
 import type { Metadata } from 'next';
 import { createClient } from '@/utils/supabase/server';
 import { CartButton } from '@/components/CartDrawer/CartButton';
@@ -12,7 +13,7 @@ interface PageProps {
 
 const RESERVED = new Set(['admin', 'login', 'auth', 'api', '_next', 'favicon.ico']);
 
-async function loadStore(slug: string) {
+const loadStore = cache(async (slug: string) => {
   const normalized = slug.toLowerCase();
   if (RESERVED.has(normalized)) return null;
 
@@ -36,7 +37,7 @@ async function loadStore(slug: string) {
     profile: profile as StoreProfile,
     products: (products ?? []) as PublicProduct[],
   };
-}
+});
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
