@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap');
 
 /* =========================================================================
    InstaCart AI — Design System Foundation
@@ -23,6 +23,11 @@
 
   /* Typography */
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Motion */
+  --t-card: 0.3s;
+  --t-fast: 0.18s;
 
   /* Shadows & Blurs */
   --blur-md: blur(12px);

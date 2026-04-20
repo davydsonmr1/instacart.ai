@@ -1,20 +1,57 @@
 .card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   background: var(--surface-glass);
   border: 1px solid var(--border-glass);
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
-  backdrop-filter: var(--blur-md);
-  -webkit-backdrop-filter: var(--blur-md);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+  transition: transform var(--t-card, 0.3s) cubic-bezier(0.22, 1, 0.36, 1),
+              border-color var(--t-card, 0.3s) ease,
+              box-shadow var(--t-card, 0.3s) ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 230, 118, 0.4);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--accent-muted);
 }
 
 .thumb {
   position: relative;
   aspect-ratio: 1 / 1;
   background: var(--bg-elevated);
+  overflow: hidden;
 }
 
-.thumb img {
+.image {
   object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+  opacity: 0;
+}
+
+.image[data-loaded='true'] {
+  opacity: 1;
+}
+
+.card:hover .image {
+  transform: scale(1.06);
+}
+
+.skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
 }
 
 .placeholder {
@@ -27,18 +64,79 @@
 }
 
 .body {
-  padding: 1rem;
+  padding: 1rem 1rem 1.1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.45rem;
 }
 
 .name {
-  font-size: 0.95rem;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 0.98rem;
   font-weight: 600;
+  letter-spacing: -0.01em;
+  /* truncation de 2 linhas */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6em;
 }
 
 .price {
-  color: var(--accent);
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 1rem;
   font-weight: 600;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.addButton {
+  margin-top: 0.5rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  background: var(--accent-muted);
+  border: 1px solid rgba(0, 230, 118, 0.35);
+  transition: transform 0.18s ease, background 0.2s ease, color 0.2s ease,
+              border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.addButton:hover {
+  background: rgba(0, 230, 118, 0.18);
+  border-color: var(--accent);
+}
+
+.addButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.addButton:active {
+  transform: scale(0.96);
+}
+
+.addButton[data-state='added'] {
+  background: var(--accent);
+  color: var(--bg-base);
+  border-color: var(--accent);
+  box-shadow: 0 0 18px var(--accent-glow);
+}
+
+.addButton[data-state='warn'] {
+  background: rgba(255, 80, 80, 0.12);
+  border-color: rgba(255, 80, 80, 0.45);
+  color: #ff9090;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .image, .addButton { transition: none; }
+  .skeleton { animation: none; }
 }
