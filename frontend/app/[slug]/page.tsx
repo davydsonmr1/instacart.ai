@@ -67,7 +67,7 @@ export default async function Storefront({ params }: PageProps) {
         {store.products.length === 0 ? (
           <p className={styles.empty}>Esta loja ainda não publicou produtos.</p>
         ) : (
-          <ProductGrid products={store.products} whatsapp={store.profile.whatsapp} />
+          <ProductGrid products={store.products} storeId={store.profile.id} />
         )}
       </main>
       <footer className={styles.footer}>

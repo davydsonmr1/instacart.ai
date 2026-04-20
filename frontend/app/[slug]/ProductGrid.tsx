@@ -1,26 +1,29 @@
 'use client';
 
-import { ProductCard } from '@/components/ProductCard/ProductCard';
+import { ProductCard, type ProductCardData } from '@/components/ProductCard/ProductCard';
+import { useCart } from '@/lib/cart/useCart';
 import styles from './storefront.module.css';
 
-export interface PublicProduct {
-  id: string;
-  name: string;
-  price: number;
-  image_url: string | null;
-}
+export interface PublicProduct extends ProductCardData {}
 
 export function ProductGrid({
   products,
-  whatsapp: _whatsapp,
+  storeId,
 }: {
   products: PublicProduct[];
-  whatsapp: string | null;
+  storeId: string;
 }) {
+  const addItem = useCart((s) => s.addItem);
+
   return (
     <div className={styles.grid}>
-      {products.map((p) => (
-        <ProductCard key={p.id} product={p} />
+      {products.map((p, i) => (
+        <ProductCard
+          key={p.id}
+          product={p}
+          priority={i === 0}
+          onAdd={(product) => addItem({ ...product, storeId })}
+        />
       ))}
     </div>
   );
