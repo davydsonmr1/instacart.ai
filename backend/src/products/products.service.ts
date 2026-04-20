@@ -79,6 +79,9 @@ export class ProductsService {
 
     if (error) {
       this.logger.error(`create error: ${error.message}`);
+      if (error.code === '23503' && error.message.includes('products_user_id_fkey')) {
+        throw new BadRequestException('Erro: Você precisa criar e salvar o seu Perfil da Loja antes de cadastrar produtos!');
+      }
       throw new BadRequestException(error.message);
     }
     return data as Product;
