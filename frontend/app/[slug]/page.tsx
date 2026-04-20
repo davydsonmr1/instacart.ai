@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { createClient } from '@/utils/supabase/server';
+import { CartButton } from '@/components/CartDrawer/CartButton';
 import { StoreHeader, type StoreProfile } from './StoreHeader';
 import { ProductGrid, type PublicProduct } from './ProductGrid';
 import styles from './storefront.module.css';
@@ -73,6 +74,7 @@ export default async function Storefront({ params }: PageProps) {
       <footer className={styles.footer}>
         Feito com <span>InstaCart AI</span>
       </footer>
+      <CartButton />
     </div>
   );
 }
