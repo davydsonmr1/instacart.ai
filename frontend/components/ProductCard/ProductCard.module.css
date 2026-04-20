@@ -1,0 +1,44 @@
+.card {
+  background: var(--surface-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+}
+
+.thumb {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: var(--bg-elevated);
+}
+
+.thumb img {
+  object-fit: cover;
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.name {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.price {
+  color: var(--accent);
+  font-weight: 600;
+}

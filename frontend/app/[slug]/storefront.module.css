@@ -1,0 +1,115 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg-base);
+  padding: 3rem 1.5rem 5rem;
+  overflow: hidden;
+}
+
+.ambient {
+  position: absolute;
+  top: -20vh;
+  left: 50%;
+  width: 80vw;
+  height: 60vh;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  opacity: 0.35;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.header {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto 3rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--surface-glass);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--accent);
+  box-shadow: 0 0 40px var(--accent-muted);
+}
+
+.storeName {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.bio {
+  color: var(--text-secondary);
+  max-width: 520px;
+  line-height: 1.5;
+}
+
+.whatsappLink {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.whatsappLink:hover {
+  background: var(--accent-muted);
+}
+
+.whatsappLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.main {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.empty {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 4rem 1rem;
+  border: 1px dashed var(--border-glass);
+  border-radius: 18px;
+}
+
+.footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-top: 4rem;
+}
+
+.footer span {
+  color: var(--accent);
+  font-weight: 600;
+}
