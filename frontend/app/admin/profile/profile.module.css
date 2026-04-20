@@ -1,0 +1,108 @@
+.wrap {
+  max-width: 640px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  margin: 0.25rem 0 2rem;
+}
+
+.subtitle code {
+  background: var(--surface-glass);
+  border: 1px solid var(--border-glass);
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--accent);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.75rem;
+  background: var(--surface-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 18px;
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.field span {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.field input,
+.field textarea {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-muted);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.primary {
+  background: var(--accent);
+  color: var(--bg-base);
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-neon); }
+.primary:active { transform: scale(0.98); }
+.primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.ok, .err {
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.ok {
+  background: var(--accent-muted);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.err {
+  background: rgba(255, 80, 80, 0.1);
+  border: 1px solid rgba(255, 80, 80, 0.35);
+  color: #ff8888;
+}
+
+.hint {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}

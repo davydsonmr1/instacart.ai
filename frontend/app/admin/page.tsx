@@ -1,31 +1,31 @@
-"use client";
+import Link from 'next/link';
+import styles from './dashboard.module.css';
 
-import { createClient } from '@/utils/supabase/client';
-import { useRouter } from 'next/navigation';
-
-export default function AdminPage() {
-  const supabase = createClient();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/login');
-  };
-
+export default function AdminDashboard() {
   return (
-    <div style={{ color: 'white', padding: '3rem', fontFamily: 'var(--font-sans)' }}>
-      <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Painel Administrativo</h1>
-      <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
-        Se você está lendo isso, a autenticação SSR funcionou perfeitamente e o Edge Middleware liberou a rota.
-      </p>
-      <button 
-        onClick={handleLogout}
-        style={{
-           background: 'var(--accent)', color: 'black', fontWeight: 'bold', 
-           padding: '10px 20px', borderRadius: '8px' 
-        }}>
-        Sair
-      </button>
-    </div>
+    <section>
+      <header className={styles.header}>
+        <h1 className={styles.title}>Dashboard</h1>
+        <p className={styles.subtitle}>
+          Gerencie sua vitrine, edite produtos e receba pedidos direto no WhatsApp.
+        </p>
+      </header>
+
+      <div className={styles.grid}>
+        <Link href="/admin/products" className={styles.card}>
+          <span className={styles.cardKicker}>Catálogo</span>
+          <h2>Produtos</h2>
+          <p>Cadastre nome, preço e imagem. Até 5 itens podem ir ao carrinho (plano Free).</p>
+          <span className={styles.cardCta}>Abrir catálogo →</span>
+        </Link>
+
+        <Link href="/admin/profile" className={styles.card}>
+          <span className={styles.cardKicker}>Loja</span>
+          <h2>Perfil</h2>
+          <p>Defina seu slug público, WhatsApp e bio. É assim que sua vitrine será indexada.</p>
+          <span className={styles.cardCta}>Editar perfil →</span>
+        </Link>
+      </div>
+    </section>
   );
 }
