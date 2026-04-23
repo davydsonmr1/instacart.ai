@@ -6,6 +6,7 @@ export interface StoreProfile {
   store_name: string;
   whatsapp: string | null;
   bio: string | null;
+  plan: 'free' | 'premium';
 }
 
 export function StoreHeader({ profile }: { profile: StoreProfile }) {

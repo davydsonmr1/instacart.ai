@@ -14,6 +14,7 @@ CREATE TABLE profiles (
   store_name TEXT NOT NULL,
   whatsapp TEXT,
   bio TEXT,
+  plan VARCHAR(20) DEFAULT 'free',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );

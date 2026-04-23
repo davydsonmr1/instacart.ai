@@ -66,4 +66,5 @@ export interface Profile {
   whatsapp: string | null;
   bio: string | null;
   bootstrap?: boolean;
+  plan: 'free' | 'premium';
 }

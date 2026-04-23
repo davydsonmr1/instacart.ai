@@ -27,6 +27,12 @@ export class UpdateProfileDto {
 
   @IsOptional()
   @IsString()
+  @Transform(({ value }) => {
+    if (typeof value !== 'string') return value;
+    const digits = value.replace(/\D/g, '');
+    // Prefixar DDI Brasil (55) se o número tem apenas DDD + número (10-11 dígitos)
+    return digits.length >= 10 && digits.length <= 11 ? `55${digits}` : digits;
+  })
   @Matches(/^\d{10,15}$/, {
     message: 'whatsapp deve ter apenas dígitos (DDI + DDD + número, 10-15 dígitos)',
   })

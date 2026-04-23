@@ -3,6 +3,8 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
+// TODO [PREMIUM]: Quando `storePlan === 'premium'`, ignorar ou aumentar FREE_PLAN_ITEM_LIMIT.
+// Implementar recebendo o plano da loja como parâmetro no addItem e condicionando o limite.
 export const FREE_PLAN_ITEM_LIMIT = 5;
 
 export interface CartItem {

@@ -1,21 +1,15 @@
 {
-  "name": "instacart-ai-backend",
+  "name": "instacart-ai",
   "version": "1.0.0",
-  "description": "InstaCart AI — Backend micro-SaaS para lojistas",
-  "main": "src/server.js",
+  "private": true,
+  "description": "InstaCart AI — Monorepo micro-SaaS para lojistas",
+  "workspaces": ["frontend", "backend"],
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "node --watch src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:front": "npm run dev --workspace=frontend",
+    "dev:back": "npm run start:dev --workspace=backend",
+    "build:front": "npm run build --workspace=frontend"
   },
-  "keywords": ["instacart", "ai", "saas", "backend"],
+  "keywords": ["instacart", "ai", "saas"],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "express-rate-limit": "^8.3.2",
-    "helmet": "^8.1.0"
-  }
+  "license": "ISC"
 }

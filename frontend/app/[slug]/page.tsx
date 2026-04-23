@@ -21,7 +21,7 @@ const loadStore = cache(async (slug: string) => {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('id, slug, store_name, whatsapp, bio')
+    .select('id, slug, store_name, whatsapp, bio, plan')
     .eq('slug', normalized)
     .maybeSingle();
 
