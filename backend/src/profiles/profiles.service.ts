@@ -66,11 +66,23 @@ export class ProfilesService {
     }
 
     const existing = await this.findByUserId(userId);
+
+    // SANITIZAÇÃO DO WHATSAPP — Defesa em profundidade
+    // O DTO já sanitiza inputs novos, mas dados legados no DB podem ter formatação.
+    let safeWhatsapp = dto.whatsapp ?? existing?.whatsapp ?? null;
+    if (safeWhatsapp) {
+      safeWhatsapp = safeWhatsapp.replace(/\D/g, '');
+      // Se o lojista esqueceu o DDI do Brasil (55), prefixamos automaticamente
+      if (safeWhatsapp.length === 10 || safeWhatsapp.length === 11) {
+        safeWhatsapp = `55${safeWhatsapp}`;
+      }
+    }
+
     const payload = {
       id: userId,
       slug: dto.slug ?? existing?.slug ?? this.fallbackSlug(userId, userEmail),
       store_name: dto.store_name ?? existing?.store_name ?? 'Minha Loja',
-      whatsapp: dto.whatsapp ?? existing?.whatsapp ?? null,
+      whatsapp: safeWhatsapp,
       bio: dto.bio ?? existing?.bio ?? null,
     };
 
