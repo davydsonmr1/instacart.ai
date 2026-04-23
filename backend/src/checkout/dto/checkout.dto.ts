@@ -23,7 +23,7 @@ export class CheckoutItemDto {
 export class CheckoutDto {
   @IsArray()
   @ArrayMinSize(1)
-  @ArrayMaxSize(5) // plano Free: 5 itens distintos
+  @ArrayMaxSize(50) // Limite real é dinâmico baseado no plan (free=5, premium=50)
   @ValidateNested({ each: true })
   @Type(() => CheckoutItemDto)
   items!: CheckoutItemDto[];

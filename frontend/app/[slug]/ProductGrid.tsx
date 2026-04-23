@@ -9,9 +9,11 @@ export interface PublicProduct extends ProductCardData {}
 export function ProductGrid({
   products,
   storeId,
+  storePlan = 'free',
 }: {
   products: PublicProduct[];
   storeId: string;
+  storePlan?: 'free' | 'premium';
 }) {
   const addItem = useCart((s) => s.addItem);
 
@@ -22,9 +24,10 @@ export function ProductGrid({
           key={p.id}
           product={p}
           priority={i === 0}
-          onAdd={(product) => addItem({ ...product, storeId })}
+          onAdd={(product) => addItem({ ...product, storeId }, storePlan)}
         />
       ))}
     </div>
   );
 }
+

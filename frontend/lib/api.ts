@@ -43,6 +43,17 @@ export const api = {
     );
   },
 
+  async postJson<T>(path: string, body: unknown): Promise<T> {
+    const headers = await authHeaders();
+    return handle<T>(
+      await fetch(`${API_URL}${path}`, {
+        method: 'POST',
+        headers: { ...headers, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      }),
+    );
+  },
+
   async del<T>(path: string): Promise<T> {
     const headers = await authHeaders();
     return handle<T>(await fetch(`${API_URL}${path}`, { method: 'DELETE', headers }));
@@ -67,4 +78,21 @@ export interface Profile {
   bio: string | null;
   bootstrap?: boolean;
   plan: 'free' | 'premium';
+}
+
+export interface OrderItem {
+  productId: string;
+  name: string;
+  unitPrice: number;
+  quantity: number;
+  subtotal: number;
+}
+
+export interface Order {
+  id: string;
+  user_id: string;
+  total_amount: number;
+  items: OrderItem[];
+  status: string;
+  created_at: string;
 }

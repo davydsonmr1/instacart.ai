@@ -12,6 +12,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </div>
         <nav className={styles.nav}>
           <Link href="/admin" className={styles.navLink}>Dashboard</Link>
+          <Link href="/admin/orders" className={styles.navLink}>Pedidos</Link>
           <Link href="/admin/products" className={styles.navLink}>Produtos</Link>
           <Link href="/admin/profile" className={styles.navLink}>Perfil da Loja</Link>
         </nav>

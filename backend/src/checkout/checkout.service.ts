@@ -2,6 +2,9 @@ import { BadRequestException, Injectable, Logger, NotFoundException } from '@nes
 import { SupabaseService } from '../supabase/supabase.service';
 import { CheckoutDto } from './dto/checkout.dto';
 
+const FREE_PLAN_ITEM_LIMIT = 5;
+const PREMIUM_PLAN_ITEM_LIMIT = 50;
+
 export interface ResolvedItem {
   productId: string;
   name: string;
@@ -56,6 +59,23 @@ export class CheckoutService {
     }
     const storeUserId = [...storeIds][0];
 
+    // Buscar perfil da loja (incluindo plan) para validação dinâmica
+    const { data: store } = await this.supabase.admin
+      .from('profiles')
+      .select('id, slug, store_name, whatsapp, plan')
+      .eq('id', storeUserId)
+      .maybeSingle();
+
+    if (!store) throw new NotFoundException('Loja não encontrada para os produtos informados');
+
+    // Validação dinâmica de limite baseada no plano
+    const limit = store.plan === 'premium' ? PREMIUM_PLAN_ITEM_LIMIT : FREE_PLAN_ITEM_LIMIT;
+    if (dto.items.length > limit) {
+      throw new BadRequestException(
+        `Plano ${store.plan ?? 'free'}: máximo ${limit} itens distintos por pedido.`,
+      );
+    }
+
     const byId = new Map(products.map((p) => [p.id, p]));
     let totalValue = 0;
     const resolved: ResolvedItem[] = dto.items.map((item) => {
@@ -72,19 +92,31 @@ export class CheckoutService {
       };
     });
 
-    const { data: store } = await this.supabase.admin
-      .from('profiles')
-      .select('id, slug, store_name, whatsapp')
-      .eq('id', storeUserId)
-      .maybeSingle();
+    // Registrar pedido no banco (Service Role bypassa RLS)
+    const { error: orderError } = await this.supabase.admin
+      .from('orders')
+      .insert({
+        user_id: storeUserId,
+        total_amount: totalValue,
+        items: resolved,
+        status: 'pending',
+      });
 
-    if (!store) throw new NotFoundException('Loja não encontrada para os produtos informados');
+    if (orderError) {
+      this.logger.error(`order insert error: ${orderError.message}`);
+      // Não bloquear checkout por falha no registro — log e segue
+    }
 
     return {
       items: resolved,
       totalValue,
       currency: 'BRL',
-      store,
+      store: {
+        id: store.id,
+        slug: store.slug,
+        store_name: store.store_name,
+        whatsapp: store.whatsapp,
+      },
     };
   }
 }

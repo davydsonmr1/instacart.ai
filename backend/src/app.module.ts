@@ -4,6 +4,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { CheckoutModule } from './checkout/checkout.module';
+import { OrdersModule } from './orders/orders.module';
+import { PaymentModule } from './payment/payment.module';
 import { ProductsModule } from './products/products.module';
 import { ProfilesModule } from './profiles/profiles.module';
 import { SupabaseModule } from './supabase/supabase.module';
@@ -20,6 +22,8 @@ import { SupabaseModule } from './supabase/supabase.module';
     ProfilesModule,
     ProductsModule,
     CheckoutModule,
+    OrdersModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],

@@ -92,7 +92,40 @@ FOR DELETE
 USING (auth.uid() = user_id);
 
 -- ==========================================
--- 5. Triggers de Atualização (Bônus DB Ops)
+-- 5. Tabela de Pedidos (Orders)
+-- ==========================================
+-- Registra cada checkout realizado. Os itens são salvos em JSONB para manter
+-- o snapshot exato do momento da compra (nome, preço, quantidade).
+
+CREATE TABLE orders (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
+  total_amount NUMERIC(10, 2) NOT NULL,
+  items JSONB NOT NULL,
+  status VARCHAR(20) DEFAULT 'pending',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+
+-- 🟢 LEITURA: Lojista vê apenas seus próprios pedidos.
+CREATE POLICY "Lojista lê próprios pedidos"
+ON orders
+FOR SELECT
+USING (auth.uid() = user_id);
+
+-- 🟡 ATUALIZAÇÃO: Lojista atualiza status dos seus pedidos.
+CREATE POLICY "Lojista atualiza próprios pedidos"
+ON orders
+FOR UPDATE
+USING (auth.uid() = user_id)
+WITH CHECK (auth.uid() = user_id);
+
+-- ⛔ INSERT: Feito exclusivamente pelo backend via Service Role (bypassa RLS).
+-- Não há política INSERT para clientes — apenas o servidor registra pedidos.
+
+-- ==========================================
+-- 6. Triggers de Atualização (Bônus DB Ops)
 -- ==========================================
 -- Mantém o `updated_at` sempre preciso sem precisar mandar no payload da API.
 
@@ -111,3 +144,4 @@ FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 CREATE TRIGGER update_products_updated_at
 BEFORE UPDATE ON products
 FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
+

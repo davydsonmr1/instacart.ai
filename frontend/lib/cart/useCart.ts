@@ -3,8 +3,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-// TODO [PREMIUM]: Quando `storePlan === 'premium'`, ignorar ou aumentar FREE_PLAN_ITEM_LIMIT.
-// Implementar recebendo o plano da loja como parâmetro no addItem e condicionando o limite.
 export const FREE_PLAN_ITEM_LIMIT = 5;
 
 export interface CartItem {
@@ -26,7 +24,7 @@ interface CartState {
   items: CartItem[];
   storeId: string | null;
 
-  addItem: (item: Omit<CartItem, 'quantity'>) => AddResult;
+  addItem: (item: Omit<CartItem, 'quantity'>, storePlan?: 'free' | 'premium') => AddResult;
   increaseQuantity: (id: string) => void;
   decreaseQuantity: (id: string) => void;
   removeItem: (id: string) => void;
@@ -44,7 +42,7 @@ export const useCart = create<CartState>()(
       items: [],
       storeId: null,
 
-      addItem: (item) => {
+      addItem: (item, storePlan = 'free') => {
         const state = get();
 
         if (state.storeId && state.storeId !== item.storeId) {
@@ -65,7 +63,8 @@ export const useCart = create<CartState>()(
           return { ok: true };
         }
 
-        if (state.items.length >= FREE_PLAN_ITEM_LIMIT) {
+        // PREMIUM: Lojas premium não têm limite de itens distintos
+        if (storePlan !== 'premium' && state.items.length >= FREE_PLAN_ITEM_LIMIT) {
           return {
             ok: false,
             reason: 'free-limit',
